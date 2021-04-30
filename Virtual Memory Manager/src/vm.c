@@ -39,6 +39,8 @@ signed char     buffer[CHUNK];
 const int PAGESIZE = 256;
 const int FRAMESIZE = 256;
 const int TLB_ENTRIES = 16;
+const int NUM_FRAMES = 8;
+const int NUM_PAGES = 256;
 int pageTable[256];
 int tlb[16][2];
 char physMem[256][256];
@@ -104,20 +106,20 @@ int main(int argc, char *argv[])
         //printf("addrNum: %f\n", addrNum);
         // check tlb first
         frame = -1;
-        for (int i; i< TLB_ENTRIES; i++){
+        for (int i = 0; i < TLB_ENTRIES; i++){
             if (pageNumber == tlb[i][0]){
-                printf("Here\n");
                 frame = tlb[i][1];
                 hitNum++;
+                break;
             }
         }
-        if(frame == -1){
-            missNum++;
+        if(frame == -1){    
             if (pageTable[pageNumber] != -1){
                     frame = pageTable[pageNumber];
-                    // add to tlb 
+                     
                 }
             else {
+                missNum++;
                 // first seek to byte CHUNK in the backing store
                 // SEEK_SET in fseek() seeks from the beginning of the file
                 if (fseek(backing_store, PAGESIZE * pageNumber, SEEK_SET) != 0) {
@@ -129,9 +131,28 @@ int main(int argc, char *argv[])
                     fprintf(stderr, "Error reading from backing store\n");
                     return -1;
                 }
+                for(int i = 0; i < NUM_PAGES; i++){
+                    if (pageTable[i] == counter){
+                        pageTable[i] = -1;
+                        break;
+                    }
+                }
+
+                for(int i = 0; i < TLB_ENTRIES; i++){
+                    if (tlb[i][1] == counter){
+                        tlb[i][0] = -1;
+                        tlb[i][1] = -1;
+                        break;
+                    }
+                }
                 pageTable[pageNumber] = counter;
                 frame = pageTable[pageNumber]; 
                 counter++;
+
+                if (counter == NUM_FRAMES){
+                    counter = 0;
+                }
+                
             }  
             // printf("Element Count: %d\n", elementCount);
             tlb[elementCount][0] = pageNumber;
@@ -145,13 +166,13 @@ int main(int argc, char *argv[])
         }
         value = physMem[frame][offset];       
         printf("%d\n", value);
-    
-        double pageFaultRate = missNum/addrNum;
-        double hitRate = hitNum/addrNum;
-        printf("Page Fault Rate %f\n", pageFaultRate);
-        printf("TLB Hit Rate %f\n", hitRate);
 
     }
+    double pageFaultRate = missNum/addrNum;
+    double hitRate = hitNum/addrNum;
+    printf("Page Fault Rate %f\n", pageFaultRate);
+    printf("TLB Hit Rate %f\n", hitRate);
+
     fclose(address_file);
     fclose(backing_store);
 
