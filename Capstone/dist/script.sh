@@ -1,0 +1,1 @@
+ssh pi@10.0.0.19 sudo service motion start
