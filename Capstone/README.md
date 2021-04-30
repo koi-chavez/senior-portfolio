@@ -12,3 +12,13 @@ To access the web application outside of the home network you can run the Pageki
 ```javascript
 pagekite.py 8090 koiseniorproject.pagekite.me 
 ```
+
+## Important Files 
+The code for the web application itself lives in /src and /dist. You can view /dist/index.html to view the styles used for the web application and /src/index.js to view the React component being rendered to the webpage. 
+
+To view the code used to configure the Raspberry Pi Web Camera set up you can view:
+* motion
+* motion.conf
+
+To view the pagekite script used to host the web application outside of the home network you can view:
+* pagekite.py
