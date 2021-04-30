@@ -1,7 +1,9 @@
 import ReactDOM from "react-dom";
 import React from "react";
 
-function myFunction() {
+// This function was originally created to be used with my component to control the access of the webstream from the Raspberry Pi. 
+// By the end of this project I was not able to get it working with my code but have decided to leave it in for possible resuse in the future. 
+function controlFunction() {
   const { exec } = require("child_process");
 
   exec("ssh pi@10.0.0.19 sudo service motion start", (error, stderr) => {
@@ -18,6 +20,9 @@ function myFunction() {
 
   console.log(`End`);
 }
+
+// React Component being rendered to the webpage. This creates the HTML elements for the webpage and styles them using the index.html file 
+// located in the dist directory. 
 
 const PageHtml = () => {
   return (

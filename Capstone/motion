@@ -1,3 +1,4 @@
-# set to 'yes' to enable the motion daemon
+# This file was used to enable the motion package used to run the web camera connected with the Raspberry Pi.
+# Set to 'yes' to enable the motion daemon
 start_motion_daemon=yes
 

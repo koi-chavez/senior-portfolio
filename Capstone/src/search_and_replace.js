@@ -1,3 +1,4 @@
+//This js file was created to test the function I was trying to create to control the start/stop functions in my Raspberry Pi camera stream. 
 function myFunction() {
   const { exec } = require("child_process");
 
